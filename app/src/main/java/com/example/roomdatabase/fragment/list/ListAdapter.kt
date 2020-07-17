@@ -3,6 +3,7 @@ package com.example.roomdatabase.fragment.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomdatabase.R
 import com.example.roomdatabase.model.User
@@ -30,6 +31,11 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         holder.itemView.firstname_txt.text = currentItem.firstname
         holder.itemView.lastname_txt.text = currentItem.lastname
         holder.itemView.age_txt.text = currentItem.age.toString()
+
+        holder.itemView.setOnClickListener{
+            val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
+            holder.itemView.findNavController().navigate(action)
+        }
     }
 
     fun setData(user: List<User>){
