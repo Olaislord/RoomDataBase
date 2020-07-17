@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 import com.example.roomdatabase.R
+import com.example.roomdatabase.databinding.FragmentUpdateBinding
 import com.example.roomdatabase.fragment.list.ListAdapter
 import com.example.roomdatabase.model.User
 import com.example.roomdatabase.viewModel.UserViewModel
@@ -19,6 +20,8 @@ import kotlinx.android.synthetic.main.fragment_update.view.*
 import kotlinx.android.synthetic.main.fragment_update.view.updateFirstname_et
 
 class UpdateFragment : Fragment() {
+    private var _binding: FragmentUpdateBinding? = null
+    private val binding get() = _binding!!
 
     private val args by navArgs<UpdateFragmentArgs>()
 
@@ -33,21 +36,21 @@ class UpdateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_update, container, false)
+        _binding =  FragmentUpdateBinding.inflate(inflater, container, false)
 
         mUserviewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         setHasOptionsMenu(true)
 
-        view.updateFirstname_et.setText(args.currentUser.firstname)
-        view.updateLastname_et.setText(args.currentUser.lastname)
-        view.updateAge_et.setText(args.currentUser.age.toString())
+        binding.updateFirstnameEt.setText(args.currentUser.firstname)
+        binding.updateLastnameEt.setText(args.currentUser.lastname)
+        binding.updateAgeEt.setText(args.currentUser.age.toString())
 
-        view.update_btn.setOnClickListener {
+        binding.updateBtn.setOnClickListener {
             updateDataToDataBase()
         }
 
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -110,4 +113,8 @@ class UpdateFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
