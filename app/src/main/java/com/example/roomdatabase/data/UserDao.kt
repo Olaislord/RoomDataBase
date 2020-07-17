@@ -8,7 +8,10 @@ import com.example.roomdatabase.model.User
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUser(user: User)
+    suspend fun addUser(user: User)// am using user -> User.kt
+
+    @Delete
+    suspend fun deleteUser(user: User) // am using user to represent User class (User.kt)
 
     @Update
     suspend fun updateUser(user: User)

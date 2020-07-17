@@ -41,7 +41,35 @@ class UpdateFragment : Fragment() {
             updateDataToDataBase()
         }
 
+        view.delete_btn.setOnClickListener {
+            deleteUserData()
+        }
+
         return view
+    }
+
+    private fun deleteUserData(){
+        val firstname = updateFirstname_et.text.toString()
+        val lastname = updateLastname_et.text.toString()
+        val age = updateAge_et.text
+
+//        val deleteUser = User(
+//            args.currentUser.id,args.currentUser.firstname,args.currentUser.lastname,Integer.parseInt(args.currentUser.age.toString())
+//        )
+        val deleteUser = User(
+            args.currentUser.id,firstname,lastname,Integer.parseInt(age.toString())
+        )
+
+        /*
+        * Question
+        * In Line 56 and 59, I implemented different function to delete the user details
+        * I understand the argument part should work i.e line 56 but why should ine 59 work??
+        * Is it because of "args.currentUser.id" ?? Am stil confused */
+
+        mUserviewModel.deleteUser(deleteUser)
+        Toast.makeText(requireContext(),"Succesfully Deleted User", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+
     }
 
     private fun updateDataToDataBase() {
@@ -50,13 +78,10 @@ class UpdateFragment : Fragment() {
         val age = updateAge_et.text
 
         if(checkInput(firstname,lastname, age)){
-            val user = User(
-                0,
-                firstname,
-                lastname,
-                Integer.parseInt(age.toString())
+            val updateUser = User(
+                args.currentUser.id, firstname, lastname, Integer.parseInt(age.toString())
             )
-            mUserviewModel.updateUser(user)
+            mUserviewModel.updateUser(updateUser)
             Toast.makeText(requireContext(),"Succesfully updated User", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         }else{
