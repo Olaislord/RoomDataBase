@@ -1,5 +1,6 @@
 package com.example.roomdatabase.fragment.update
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.view.*
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 import com.example.roomdatabase.R
+import com.example.roomdatabase.fragment.list.ListAdapter
 import com.example.roomdatabase.model.User
 import com.example.roomdatabase.viewModel.UserViewModel
 import kotlinx.android.synthetic.main.fragment_update.*
@@ -19,6 +21,10 @@ import kotlinx.android.synthetic.main.fragment_update.view.updateFirstname_et
 class UpdateFragment : Fragment() {
 
     private val args by navArgs<UpdateFragmentArgs>()
+
+    private var userList = emptyList<User>()
+
+    private val adapter = ListAdapter()
 
     private lateinit var mUserviewModel: UserViewModel
 
@@ -41,43 +47,42 @@ class UpdateFragment : Fragment() {
             updateDataToDataBase()
         }
 
-        view.delete_btn.setOnClickListener {
-            deleteUserData()
-        }
-
         return view
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        super.onCreateOptionsMenu(menu, inflater)
-//        inflater?.inflate(R.menu.delete_menu, menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId = R.id.delete_menu){
-//
-//        }
-//    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.delete_menu, menu)
+    }
 
-    private fun deleteUserData(){
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_delete){
+            deleteUser()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
-//        val deleteUser = User(
-//            args.currentUser.id,args.currentUser.firstname,args.currentUser.lastname,Integer.parseInt(args.currentUser.age.toString())
-//        )
-//        val deleteUser = User(
-//            args.currentUser.id,firstname,lastname,Integer.parseInt(age.toString())
-//        )
+    private fun deleteUser() {
+        if (adapter.itemCount > 0){
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton("Yes"){_,_->
+                mUserviewModel.deleteUser(args.currentUser)
+                Toast.makeText(requireContext(),
+                    "Successfully removed: ${args.currentUser.firstname}?",
+                    Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+            }
 
-        /*
-        * Question
-        * In Line 56 and 59, I implemented different function to delete the user details
-        * I understand the argument part should work i.e line 56 but why should ine 59 work??
-        * Is it because of "args.currentUser.id" ?? Am stil confused */
+            builder.setNegativeButton("No"){_,_ ->}
+            builder.setTitle("Delete ${args.currentUser.firstname}?")
+            builder.setMessage("Are you sure you want to delete ${args.currentUser.firstname}?")
+            builder.create().show()
 
-        mUserviewModel.deleteUser(args.currentUser)
-        Toast.makeText(requireContext(),"Succesfully Deleted User", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+        }else{
+            Toast.makeText(requireContext(),
+                "You have not saved any User yet",Toast.LENGTH_SHORT).show()
 
+        }
     }
 
     private fun updateDataToDataBase() {

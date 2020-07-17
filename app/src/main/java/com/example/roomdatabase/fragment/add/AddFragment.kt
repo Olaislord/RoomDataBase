@@ -10,12 +10,16 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.roomdatabase.R
+import com.example.roomdatabase.databinding.FragmentAddBinding
 import com.example.roomdatabase.viewModel.UserViewModel
 import com.example.roomdatabase.model.User
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
 
 class AddFragment : Fragment() {
+
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var mUserViewModel: UserViewModel
 
@@ -24,15 +28,15 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_add, container, false)
+        _binding = FragmentAddBinding.inflate(inflater, container, false)
 
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        view.add_btn.setOnClickListener {
+        binding.addBtn.setOnClickListener {
             insertDataToDatabase()
         }
 
-        return view
+        return binding.root
     }
 
     private fun insertDataToDatabase() {
@@ -66,4 +70,8 @@ class AddFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
