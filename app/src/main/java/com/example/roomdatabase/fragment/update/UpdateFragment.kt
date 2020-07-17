@@ -2,10 +2,8 @@ package com.example.roomdatabase.fragment.update
 
 import android.os.Bundle
 import android.text.Editable
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,6 +31,8 @@ class UpdateFragment : Fragment() {
 
         mUserviewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
+        setHasOptionsMenu(true)
+
         view.updateFirstname_et.setText(args.currentUser.firstname)
         view.updateLastname_et.setText(args.currentUser.lastname)
         view.updateAge_et.setText(args.currentUser.age.toString())
@@ -48,17 +48,25 @@ class UpdateFragment : Fragment() {
         return view
     }
 
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater?.inflate(R.menu.delete_menu, menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId = R.id.delete_menu){
+//
+//        }
+//    }
+
     private fun deleteUserData(){
-        val firstname = updateFirstname_et.text.toString()
-        val lastname = updateLastname_et.text.toString()
-        val age = updateAge_et.text
 
 //        val deleteUser = User(
 //            args.currentUser.id,args.currentUser.firstname,args.currentUser.lastname,Integer.parseInt(args.currentUser.age.toString())
 //        )
-        val deleteUser = User(
-            args.currentUser.id,firstname,lastname,Integer.parseInt(age.toString())
-        )
+//        val deleteUser = User(
+//            args.currentUser.id,firstname,lastname,Integer.parseInt(age.toString())
+//        )
 
         /*
         * Question
@@ -66,7 +74,7 @@ class UpdateFragment : Fragment() {
         * I understand the argument part should work i.e line 56 but why should ine 59 work??
         * Is it because of "args.currentUser.id" ?? Am stil confused */
 
-        mUserviewModel.deleteUser(deleteUser)
+        mUserviewModel.deleteUser(args.currentUser)
         Toast.makeText(requireContext(),"Succesfully Deleted User", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_updateFragment_to_listFragment)
 
