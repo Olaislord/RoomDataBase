@@ -8,17 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.roomdatabase.R
+import com.example.roomdatabase.SwipeToDeleteCallback
 import com.example.roomdatabase.databinding.FragmentListBinding
-import com.example.roomdatabase.model.User
 import com.example.roomdatabase.viewModel.UserViewModel
-import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.android.synthetic.main.fragment_list.view.*
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
+
+    private val args by navArgs<ListFragmentArgs>()
 
     private lateinit var mUserViewModel: UserViewModel
 
@@ -46,6 +49,16 @@ class ListFragment : Fragment() {
             adapter.setData(user)
             user.isEmpty()
         })
+
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                //val adapter = recyclerView.adapter as SimpleAdapter
+               // adapter.removeAt(viewHolder.adapterPosition)
+                mUserViewModel.deleteUser(adapter.getUserPosition(viewHolder.adapterPosition))
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
