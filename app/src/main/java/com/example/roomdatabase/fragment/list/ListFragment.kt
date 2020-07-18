@@ -21,8 +21,6 @@ class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
-    private val args by navArgs<ListFragmentArgs>()
-
     private lateinit var mUserViewModel: UserViewModel
 
     private val adapter = ListAdapter()

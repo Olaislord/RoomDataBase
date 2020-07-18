@@ -20,9 +20,6 @@
             app:destination="@id/updateFragment"
             app:popUpTo="@id/listFragment"
             app:popUpToInclusive="false" />
-        <argument
-            android:name="currentUser"
-            app:argType="com.example.roomdatabase.model.User" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"

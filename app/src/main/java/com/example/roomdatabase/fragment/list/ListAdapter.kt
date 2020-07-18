@@ -45,10 +45,10 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun removeAt(position: Int) {
-        userList.removeAt(position)
+    /*fun removeAt(position: Int) {
+        userList.removeAt(position)            // This code caused a bug for me
         notifyItemRemoved(position)
-    }
+    }*/
 
     fun getUserPosition(position: Int): User{
         return userList.get(position)
